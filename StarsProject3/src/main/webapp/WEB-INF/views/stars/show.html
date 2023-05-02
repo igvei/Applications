@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show</title>
+</head>
+<body>
+<b style="color: red" th:text="${'Name: ' + star.getName()}">VALUE</b>
+<p style="color: green" th:text="${'Constellation: ' + star.getConstellation()}">VALUE</p>
+<p style="color: green" th:text="${'Temperature: ' + star.getTemperature()}">VALUE</p>
+<p style="color: green" th:text="${'Mass: ' + star.getMass()}">VALUE</p>
+<p style="color: green" th:text="${'Radius: ' + star.getRadius()}">VALUE</p>
+<p style="color: green" th:text="${'Luminosity: ' + star.getLuminosity()}">VALUE</p>
+<br/>
+
+<a style="color: black; text-decoration: none" th:href="@{/stars/{id}/edit(id=${star.getId()})}"><button>Edit info</button></a>
+<br/>
+<br/>
+<form th:method="DELETE" th:action="@{/stars/{id}(id=${star.getId()})}">
+    <input type="submit" value="Delete"/>
+</form>
+</body>
+</html>

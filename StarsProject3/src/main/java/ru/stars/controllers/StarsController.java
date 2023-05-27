@@ -11,7 +11,7 @@ import ru.stars.models.Star;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/stars")
+@RequestMapping("/stars")  //Автоматически к адресу добавляется /stars
 public class StarsController {
 
     private final StarDAO starDAO;
@@ -21,24 +21,24 @@ public class StarsController {
         this.starDAO = starDAO;
     }
 
-    @GetMapping()
+    @GetMapping()                       // При отсутствии запроса
     public String index(Model model) {
-        model.addAttribute("stars", starDAO.index());
+        model.addAttribute("stars", starDAO.indexStars());
         return "stars/index";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}")                //Сервер получает id звезды и выводит представление с параметрами звезды
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("star", starDAO.show(id));
         return "stars/show";
     }
 
-    @GetMapping("/new")
+    @GetMapping("/new")             // При запросе /stars/new выводится представление для создании новой звезды
     public String newStar(@ModelAttribute("star") Star star) {
         return "stars/new";
     }
 
-    @PostMapping()
+    @PostMapping()                  // Посылает на сервер данные с формы
     public String create(@ModelAttribute("star") @Valid Star star, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "stars/new";
@@ -46,13 +46,13 @@ public class StarsController {
         return "redirect:/stars";
     }
 
-    @GetMapping("/{id}/edit")
+    @GetMapping("/{id}/edit")       //Получаем представление для редактирования данных о звезде
     public String edit(Model model, @PathVariable("id") int id) {
         model.addAttribute("star", starDAO.show(id));
         return "stars/edit";
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}")          //Получаем id звезды, для которой обновим данные
     public String update(@ModelAttribute("star") @Valid Star star, BindingResult bindingResult, @PathVariable("id") int id) {
         if (bindingResult.hasErrors())
             return "stars/edit";
@@ -60,7 +60,7 @@ public class StarsController {
         return "redirect:/stars";
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")         //Получаем id звезды, которую удалим из базы данных
     public String delete(@PathVariable("id") int id) {
         starDAO.delete(id);
         return "redirect:/stars";

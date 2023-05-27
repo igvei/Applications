@@ -1,37 +1,22 @@
 package ru.stars.dao;
 
 import org.springframework.stereotype.Component;
+import ru.stars.config.DataBase;
 import ru.stars.models.Star;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 @Component
 public class StarDAO {
-    private static final String URL = "jdbc:mysql://localhost:3307/mydbtest";
-    private static final String USERNAME = "root1";
-    private static final String PASSWORD = "root1";
+    //Подключаем базу данных
 
-    private static Connection connection;
 
-    static {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
-    public List<Star> index() {
+    //Создание объекта звезды со всеми звездами из БД (при визуализации будем обращаться к некоторым полям элементов листа)
+    public List<Star> indexStars() {
         List<Star> stars = new ArrayList<>();
 
         try {
-            Statement statement = connection.createStatement();
+            Statement statement = DataBase.getConnection().createStatement();
             String SQL = "SELECT * FROM stars";
             ResultSet resultSet = statement.executeQuery(SQL);
 
@@ -46,14 +31,6 @@ public class StarDAO {
                 star.setRadius(resultSet.getDouble("radius"));
                 star.setLuminosity(resultSet.getDouble("luminosity"));
                 stars.add(star);
-                System.out.println("id = " + resultSet.getInt("id"));
-                System.out.println("name = " + resultSet.getString("name"));
-                System.out.println("constellation = " + resultSet.getString("constellation"));
-                System.out.println("temperature = " + resultSet.getInt("temperature"));
-                System.out.println("mass = " + resultSet.getDouble("mass"));
-                System.out.println("radius = " + resultSet.getDouble("radius"));
-                System.out.println("luminosity = " + resultSet.getDouble("luminosity"));
-
             }
 
         } catch (SQLException throwables) {
@@ -63,12 +40,13 @@ public class StarDAO {
         return stars;
     }
 
+    // Создание объекта звезды с определенным id (при визуализации будем обращаться к полям этого объекта)
     public Star show(int id) {
         Star star = null;
 
         try {
             PreparedStatement preparedStatement =
-                    connection.prepareStatement("SELECT * FROM stars WHERE id=?");
+                    DataBase.getConnection().prepareStatement("SELECT * FROM stars WHERE id=?");
 
             preparedStatement.setInt(1, id);
 
@@ -92,15 +70,16 @@ public class StarDAO {
         return star;
     }
 
+    // Добавление в базу данных звезды
     public void save(Star star) {
         try {
             PreparedStatement preparedStatement =
-                    connection.prepareStatement("SELECT * FROM stars ORDER BY id DESC LIMIT 1");
+                    DataBase.getConnection().prepareStatement("SELECT * FROM stars ORDER BY id DESC LIMIT 1");
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             int lastId = resultSet.getInt("id");
             System.out.println("lastId = " + lastId);
-            preparedStatement = connection.prepareStatement("INSERT INTO stars VALUES(?, ?, ?, ?, ?, ?, ?)");
+            preparedStatement = DataBase.getConnection().prepareStatement("INSERT INTO stars VALUES(?, ?, ?, ?, ?, ?, ?)");
 
             preparedStatement.setInt(1, lastId + 1);
             preparedStatement.setString(2, star.getName());
@@ -116,10 +95,11 @@ public class StarDAO {
         }
     }
 
+    // Обновление полей данных какой-то звезды
     public void update(int id, Star updatedStar) {
         try {
             PreparedStatement preparedStatement =
-                    connection.prepareStatement("UPDATE stars SET name=?, constellation=?, temperature=?, mass=?, radius=?, luminosity=? WHERE id=?");
+                    DataBase.getConnection().prepareStatement("UPDATE stars SET name=?, constellation=?, temperature=?, mass=?, radius=?, luminosity=? WHERE id=?");
 
             preparedStatement.setString(1, updatedStar.getName());
             preparedStatement.setString(2, updatedStar.getConstellation());
@@ -135,10 +115,11 @@ public class StarDAO {
         }
     }
 
+    //Удаление какой-то звезды
     public void delete(int id) {
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = connection.prepareStatement("DELETE FROM stars WHERE id=?");
+            preparedStatement = DataBase.getConnection().prepareStatement("DELETE FROM stars WHERE id=?");
 
             preparedStatement.setInt(1, id);
 

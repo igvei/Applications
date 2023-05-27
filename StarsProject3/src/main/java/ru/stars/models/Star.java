@@ -14,7 +14,6 @@ public class Star {
     private double radius;
     private double luminosity;
 
-
     public Star() {
 
     }

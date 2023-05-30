@@ -14,7 +14,7 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 @Configuration
 @ComponentScan("ru.stars")
-@EnableWebMvc //
+@EnableWebMvc //ttttttttt
 
 //Реализация интерфейса WebMvcConfigurer = настраиваем под себя Spring MVC (вместо стандартного шаблонизатора мы хотим использовать Thymeleaf)
 public class SpringConfig implements WebMvcConfigurer {

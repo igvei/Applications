@@ -21,7 +21,7 @@ public class StarsController {
         this.starDAO = starDAO;
     }
 
-    @GetMapping()                       // При отсутствии запроса
+    @GetMapping()                       // При запросе /stars
     public String index(Model model) {
         model.addAttribute("stars", starDAO.indexStars());
         return "stars/index";

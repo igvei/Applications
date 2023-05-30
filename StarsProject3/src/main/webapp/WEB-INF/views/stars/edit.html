@@ -19,15 +19,15 @@
     <input type="text" th:field="*{temperature}" id="temperature"/>
     <div style="color: red" th:if="${#fields.hasErrors('temperature')}" th:errors="*{temperature}">Email error</div>
     <br/>
-    <label for="mass">Enter molecular weight: </label>
+    <label for="mass">Enter mass: </label>
     <input type="text" th:field="*{mass}" id="mass"/>
     <div style="color: red" th:if="${#fields.hasErrors('mass')}" th:errors="*{mass}">Email error</div>
     <br/>
-    <label for="radius">Enter molecular weight: </label>
+    <label for="radius">Enter radius: </label>
     <input type="text" th:field="*{radius}" id="radius"/>
     <div style="color: red" th:if="${#fields.hasErrors('radius')}" th:errors="*{radius}">Email error</div>
     <br/>
-    <label for="luminosity">Enter molecular weight: </label>
+    <label for="luminosity">Enter luminosity: </label>
     <input type="text" th:field="*{luminosity}" id="luminosity"/>
     <div style="color: red" th:if="${#fields.hasErrors('luminosity')}" th:errors="*{luminosity}">Email error</div>
     <br/>
